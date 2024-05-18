@@ -1,6 +1,6 @@
 if game.CoreGui:FindFirstChild("FluxLib") or game.CoreGui:FindFirstChild("Message") then return end
 
-local Flux = loadstring(game:HttpGet("https://lolcat.boo/assets/flux-fixed"))()
+local Flux = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/fluxlib.txt"))()
 local Window = Flux:Window("awesome script  ", "Doors", Color3.new(0,0.8), Enum.KeyCode.RightControl)
 local Tab = Window:Tab("Main", "rbxassetid://6026568198")
 local Tab2 = Window:Tab("Visual", "rbxassetid://6031763426")
@@ -430,7 +430,6 @@ end)
 Tab:Toggle("Closet Exit Fix","Fixes the bug where you can't exit a closet right after entering it",false,function(Bool)
     ClosetExitFix = Bool
 end)
-if Floor.Value == "Hotel" or Floor.Value == "Fools" then
     Tab:Toggle("Disable Dupe Doors","Makes it so you can't open duped doors",false,function(Bool)
         DisableDupe = Bool
         for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
@@ -507,14 +506,7 @@ Tab:Toggle("Increased Interaction Range","Doubles the Max Activation Distance fo
         end
     end
 end)
-Tab:Toggle("Instant Interact","Removes having to hold down the button for a long period of time on Proximity Prompts.",false,function(Bool)
-    InstantInteract = Bool
-    for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
-        if Object:IsA("ProximityPrompt") then
-            Object.HoldDuration = -Object.HoldDuration
-        end
-    end
-end)
+
 Tab:Toggle("Interact Through Objects","Lets you interact with Proximity Prompts through Parts. Could be useful for grabbing book faster.",false,function(Bool)
     InteractNoclip = Bool
     for _,Object in pairs(workspace.CurrentRooms:GetDescendants()) do
@@ -532,13 +524,7 @@ Tab:Toggle("No Breaker Puzzle","Tricks the game into thinking you completed the 
         EntityInfo.EBF:FireServer()
     end
 end)
-Tab:Toggle("Noclip","Lets you walk through any object. Does not work on Doors.",false,function(Bool)
-    Noclip = Bool
-    if Character:FindFirstChild("Collision") then
-        Character.Collision.CanCollide = not Noclip
-    end
-    PrimaryPart.CanCollide = not Noclip
-end)
+
 Tab:Slider("Speed Boost","Boosts your speed.",0,6,0,function(speed)
     SpeedBoost = speed
     ApplySpeed(true)
@@ -632,7 +618,6 @@ Tab:Toggle("Waste Other Players Items","Repeatedly uses everyone else's items li
         end
     end
 end)
-if Floor.Value == "Rooms" then
     Tab2:Toggle("Disable A-90","Disables A-90 visual, sound, and damage.",false,function(Bool)
         DisableA90 = Bool
     end)
@@ -653,13 +638,17 @@ Tab2:Toggle("Item ESP","Highlights items like Keys, Books, and Crucifixes throug
         end
     end
 end)
-if Floor.Value == "Hotel" or Floor.Value == "Fools" then
     Tab2:Toggle("No Darkness Effect","Makes it so you can see further in dark rooms.",false,function(Bool)
-        NoDark = Bool
-        if CurrentRooms[LocalPlayer:GetAttribute("CurrentRoom")]:GetAttribute("IsDark") then
-            local Color = not NoDark and Room:GetAttribute("IsDark") and Color3.new() or Color3.fromRGB(67, 51, 56)
-            Lighting.Ambient = Color
-        end
+        if Bool then
+            game.Lighting.FogEnd = 9e9
+            game.Lighting.GlobalShadows = false
+            game.Lighting.OutdoorAmbient = color3.new(1,1,1)
+            game.Lighting.Brightness = 2
+else
+            game.Lighting.FogEnd = 100
+            game.Lighting.GlobalShadows = true
+            game.Lighting.OutdoorAmbient = color3.new(0,0,0)
+            game.Lighting.Brightness = 0.75
     end)
 end
 Tab2:Toggle("Other ESP","Highlights all hostile entities.",false,function(Bool)
@@ -676,21 +665,10 @@ end)
 Tab2:Toggle("Remove Glitch Jumpscare","Removes the Glitch visual and sound. Will still teleport you.",false,function(Bool)
     DisableGlitch = Bool
 end)
-if Floor.Value == "Hotel" or Floor.Value == "Fools" then
     Tab2:Toggle("Remove Timothy Jumpscare","Removes the Timothy visual and sound. Will still deal damage.",false,function(Bool)
         DisableTimothy = Bool
     end)
 end
-Tab2:Toggle("Spam Motor Replication","Other players will basically see you having a seizure.",false,function(Bool)
-    if Bool then
-        SpoofMotor = game:GetService("RunService").Heartbeat:Connect(function()
-            MotorReplication:FireServer(math.random(1,100000),math.random(1,100000),math.random(1,100000),false)
-        end)
-    else
-        SpoofMotor:Disconnect()
-    end
-end)
-if Floor.Value == "Hotel" or Floor.Value == "Fools" then
     Tab2:Toggle("Unbreakable Lights","Makes it so entities like Rush and Ambush won't shatter/break the lights (which makes the room dark)",false,function(Bool)
         if Bool then
             Module_Events.shatter = function(Room)
